@@ -6,8 +6,8 @@ from urllib.parse import unquote
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 base_url = "https://192.168.223.240"
-vcenter_username = ""
-vcenter_password = ""
+vcenter_username = "administrator@vsphere.local"
+vcenter_password = "!Meowmeow.local8787"
 
 headers = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0"}
 
@@ -201,21 +201,40 @@ def ret_cookies(vsphere_ui_jsessionid, vsphere_username, vsphere_client_session_
     return cookies
 
 def revert(machine, base_url, cookies, headers):
-    if machine == "meow":
-        id = "4444"
+
+    # DC01 3001 DC02 3002 WS01 3004 WS02 3006
+    id = ""
+
+    if machine == "DC01":
+        id = "3001"
+    elif machine == "DC02":
+        id = "3002"
+    elif machine == "WS01":
+        id = "3004"
+    elif machine == "WS02":
+        id = "3006"
     else:
          print("[*] No Select Machine in Database.")
-    url = f"/ui/mutation/apply/urn%3Avmomi%3AVirtualMachineSnapshot%3Asnapshot-{id}%3Afc690f35-e97e-46d5-b3ae-5da238a51518?propertyObjectType=com.vmware.vsphere.client.vm.snapshot.VmSnapshotRevertSpec"
-    xsrf_header = {"X-Vsphere-Ui-Xsrf-Token": cookies["VSPHERE-UI-XSRF-TOKEN"]}
-    te = {"Te": "trailers"}
-    headers.update(xsrf_header)
-    headers.update(te)
-    json = {"suppressPowerOn": "false"}
 
-    r = requests.post(base_url + url, json=json, cookies=cookies, headers=headers, verify=False)
+    if id:
+        url = f"/ui/mutation/apply/urn%3Avmomi%3AVirtualMachineSnapshot%3Asnapshot-{id}%3Afc690f35-e97e-46d5-b3ae-5da238a51518?propertyObjectType=com.vmware.vsphere.client.vm.snapshot.VmSnapshotRevertSpec"
+        xsrf_header = {"X-Vsphere-Ui-Xsrf-Token": cookies["VSPHERE-UI-XSRF-TOKEN"]}
+        te = {"Te": "trailers"}
+        headers.update(xsrf_header)
+        headers.update(te)
+        json = {"suppressPowerOn": "false"}
 
-    if r.status_code == 200:
-        print("[*] Selected machine will be revert now.")
+        try:
+            r = requests.post(base_url + url, json=json, cookies=cookies, headers=headers, verify=False)
+        except:
+            print("[!] Cannot connect vCenter !!")
+            print("[!] Failed on revert stage.")
+            exit()
+
+        if r.status_code == 200:
+            print("[*] Selected machine will be revert now.")
+        else:
+            print("[!] Status code is not 200.")
 
 def main(base_url, vcenter_username, vcenter_password, headers):
     pre_vsphere_ui_jsessionid = pre_auth(base_url, headers)
@@ -225,8 +244,9 @@ def main(base_url, vcenter_username, vcenter_password, headers):
     vsphere_ui_xsrf_token = xsrf_token(base_url, vsphere_username, vsphere_client_session_index, vsphere_ui_jsessionid, castle_session, headers)
     cookies = ret_cookies(vsphere_ui_jsessionid, vsphere_username, vsphere_client_session_index, vsphere_ui_xsrf_token, castle_session)
     while True:
-        print("Available Machine : DC01 DC02 WS01 WS02")
-        machine = input("[?] Select Revert Machine :")
+        print("--------------------------------------------")
+        print("[*] Available Machine : DC01 DC02 WS01 WS02")
+        machine = input("[?] Select Revert Machine : ")
         revert(machine, base_url, cookies, headers)
 
 

@@ -5,9 +5,9 @@ import requests, urllib3, base64
 from urllib.parse import unquote
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-base_url = "https://192.168.223.240"
-vcenter_username = "administrator@vsphere.local"
-vcenter_password = "!Meowmeow.local8787"
+base_url = ""
+vcenter_username = ""
+vcenter_password = ""
 
 headers = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0"}
 

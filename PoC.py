@@ -202,17 +202,10 @@ def ret_cookies(vsphere_ui_jsessionid, vsphere_username, vsphere_client_session_
 
 def revert(machine, base_url, cookies, headers):
 
-    # DC01 3001 DC02 3002 WS01 3004 WS02 3006
     id = ""
 
-    if machine == "DC01":
-        id = "3001"
-    elif machine == "DC02":
-        id = "3002"
-    elif machine == "WS01":
-        id = "3004"
-    elif machine == "WS02":
-        id = "3006"
+    if machine == "meow":
+        id = "1"
     else:
          print("[*] No Select Machine in Database.")
 

@@ -1,13 +1,13 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # PoC By Red Meow
 # https://www.facebook.com/aifred0729TW/
 import requests, urllib3, base64
 from urllib.parse import unquote
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-base_url = ""
-vcenter_username = ""
-vcenter_password = ""
+base_url = "https://192.168.223.240"
+vcenter_username = "administrator@vsphere.local"
+vcenter_password = "!Meowmeow.local8787"
 
 headers = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0"}
 
@@ -202,10 +202,17 @@ def ret_cookies(vsphere_ui_jsessionid, vsphere_username, vsphere_client_session_
 
 def revert(machine, base_url, cookies, headers):
 
+    # DC01 3001 DC02 3002 WS01 3004 WS02 3006
     id = ""
 
-    if machine == "meow":
-        id = "1"
+    if machine == "DC01":
+        id = "3001"
+    elif machine == "DC02":
+        id = "3002"
+    elif machine == "WS01":
+        id = "3004"
+    elif machine == "WS02":
+        id = "3006"
     else:
          print("[*] No Select Machine in Database.")
 

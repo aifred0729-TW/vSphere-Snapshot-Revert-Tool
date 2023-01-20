@@ -5,16 +5,11 @@ import requests, urllib3, base64, json
 from urllib.parse import unquote
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-base_url = "https://192.168.223.240"
+base_url = ""
 vcenter_username = ""
 vcenter_password = ""
 
 headers = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0"}
-
-proxies = {
-   'http': 'http://127.0.0.1:8080',
-   'https': 'http://127.0.0.1:8080',
-}
 
 def pre_auth(base_url, headers):
 
